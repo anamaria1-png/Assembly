@@ -1,0 +1,92 @@
+section .text
+
+global _start
+
+_start:
+
+    
+    mov eax, 3
+    xor ebx, ebx
+    mov ecx, x
+    mov edx, 1
+    int 0x80
+    
+    
+    mov eax, [x]
+    sub eax, 0x30   
+    mov [x], eax   
+    
+   
+    mov eax, 3
+    xor ebx, ebx
+    mov ecx, y
+    mov edx, 1
+    int 0x80
+    
+   
+    mov eax, 3
+    xor ebx, ebx
+    mov ecx, y
+    mov edx, 1
+    int 0x80
+    
+    mov eax, [y]
+    sub eax, 0x30   
+    mov [y], eax    
+    
+    mov eax, [y]
+    cmp [x], eax
+    jge x_mai_mare
+    jl y_mai_mare
+
+    x_mai_mare:
+	    mov ebx, [y]
+	    mov eax, [x]
+	    sub eax, ebx
+	    add eax, 0x30
+	    mov [x], eax
+	    mov ecx, msg
+    	mov edx, len
+        mov ebx, 1
+    	mov eax, 4
+    	int 0x80
+	    jmp afisare
+    
+    y_mai_mare:
+	    mov ebx, [x]
+	    mov eax, [y]
+	    sub eax, ebx
+	    add eax, 0x30
+	    mov [x], eax
+	    mov ecx, msg
+    	mov edx, len
+    	mov ebx, 1
+    	mov eax, 4
+    	int 0x80
+    	mov ecx, minus
+    	mov edx, 1
+    	mov ebx, 1
+        mov eax, 4
+    	int 0x80
+	    jmp afisare
+
+
+    afisare:
+        mov ecx, x
+        mov edx, 1
+        mov ebx, 1
+        mov eax, 4
+        int 0x80
+    
+    mov eax, 1
+    int 0x80
+
+section .data       
+    msg db  "Diferenta dintre x si y este : "
+    len equ $ - msg
+    minus db "-"
+
+segment .bss
+    x resd 1
+    y resd 1
+    x_buffer resd 1
